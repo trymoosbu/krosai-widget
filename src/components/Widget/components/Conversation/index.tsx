@@ -1,21 +1,25 @@
-import { useRef, useState, useEffect } from 'react';
-import { Picker } from 'emoji-mart';
-import cn from 'classnames';
+import { useRef, useState, useEffect } from "react";
+import { Picker } from "emoji-mart";
+import cn from "classnames";
 
-import Header from './components/Header';
-import Messages from './components/Messages';
-import Sender from './components/Sender';
-import QuickButtons from './components/QuickButtons';
+import QuickButtons from "../Messages/QuickButtons";
 
-import { AnyFunction } from '../../../../utils/types';
+import { AnyFunction } from "../../../../utils/types";
 
-import './style.scss';
+import "./style.scss";
+import Home from "../Home";
+import Sender from "../Messages/Sender";
+import Messages from "../Messages";
+
+import Avatar from "../../../../../assets/widget-logo.png";
+import LogoIcon from "../../../../../assets/LogoIcon.png";
+import Header from "../Header";
 
 interface ISenderRef {
   onSelectEmoji: (event: any) => void;
 }
 
-type Props = {
+type ConversationProps = {
   title: string;
   subtitle: string;
   senderPlaceHolder: string;
@@ -54,87 +58,124 @@ function Conversation({
   sendButtonAlt,
   showTimeStamp,
   resizable,
-  emojis
-}: Props) {
+  emojis,
+}: ConversationProps) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
+  const [currentView, setCurrentView] = useState<"home" | "messages">("home");
+
+  const handleViewSwitch = (view: "home" | "messages") => {
+    setCurrentView(view);
+  };
+
   let startX, startWidth;
 
   useEffect(() => {
-    const containerDiv = document.getElementById('rcw-conversation-container');
+    const containerDiv = document.getElementById("rcw-conversation-container");
     setContainerDiv(containerDiv);
   }, []);
 
   const initResize = (e) => {
     if (resizable) {
       startX = e.clientX;
-      if (document.defaultView && containerDiv){
-        startWidth = parseInt(document.defaultView.getComputedStyle(containerDiv).width);
-        window.addEventListener('mousemove', resize, false);
-        window.addEventListener('mouseup', stopResize, false);
+      if (document.defaultView && containerDiv) {
+        startWidth = parseInt(
+          document.defaultView.getComputedStyle(containerDiv).width
+        );
+        window.addEventListener("mousemove", resize, false);
+        window.addEventListener("mouseup", stopResize, false);
       }
     }
-  }
+  };
 
   const resize = (e) => {
     if (containerDiv) {
-      containerDiv.style.width = (startWidth - e.clientX + startX) + 'px';
+      containerDiv.style.width = startWidth - e.clientX + startX + "px";
     }
-  }
+  };
 
   const stopResize = (e) => {
-    window.removeEventListener('mousemove', resize, false);
-    window.removeEventListener('mouseup', stopResize, false);
-  }
-  
-  const [pickerOffset, setOffset] = useState(0)
+    window.removeEventListener("mousemove", resize, false);
+    window.removeEventListener("mouseup", stopResize, false);
+  };
+
+  const [pickerOffset, setOffset] = useState(0);
   const senderRef = useRef<ISenderRef>(null!);
-  const [pickerStatus, setPicket] = useState(false) 
- 
+  const [pickerStatus, setPicket] = useState(false);
+
   const onSelectEmoji = (emoji) => {
-    senderRef.current?.onSelectEmoji(emoji)
-  }
+    senderRef.current?.onSelectEmoji(emoji);
+  };
 
   const togglePicker = () => {
-    setPicket(prevPickerStatus => !prevPickerStatus)
-  }
+    setPicket((prevPickerStatus) => !prevPickerStatus);
+  };
 
   const handlerSendMsn = (event) => {
-    sendMessage(event)
-    if(pickerStatus) setPicket(false)
-  }
+    sendMessage(event);
+    if (pickerStatus) setPicket(false);
+  };
 
   return (
-    <div id="rcw-conversation-container" onMouseDown={initResize} 
-      className={cn('rcw-conversation-container', className)} aria-live="polite">
+    <div
+      id="rcw-conversation-container"
+      onMouseDown={initResize}
+      className={cn("rcw-conversation-container", className)}
+      aria-live="polite"
+    >
       {resizable && <div className="rcw-conversation-resizer" />}
-      <Header
-        title={title}
-        subtitle={subtitle}
-        toggleChat={toggleChat}
-        showCloseButton={showCloseButton}
-        titleAvatar={titleAvatar}
-      />
-      <Messages
-        profileAvatar={profileAvatar}
-        profileClientAvatar={profileClientAvatar}
-        showTimeStamp={showTimeStamp}
-      />
-      <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
-      {emojis && pickerStatus && (<Picker 
-        style={{ position: 'absolute', bottom: pickerOffset, left: '0', width: '100%' }}
-        onSelect={onSelectEmoji}
-      />)}
-      <Sender
-        ref={senderRef}
-        sendMessage={handlerSendMsn}
-        placeholder={senderPlaceHolder}
-        disabledInput={disabledInput}
-        autofocus={autofocus}
-        onTextInputChange={onTextInputChange}
-        buttonAlt={sendButtonAlt}
-        onPressEmoji={togglePicker}
-        onChangeSize={setOffset}
-      />
+      {currentView === "home" ? (
+        <>
+          <Home
+            title={title}
+            subtitle={subtitle}
+            avatar={Avatar}
+            footerText="Powered by"
+            footerIcon={LogoIcon}
+            footerCN="KrosAI"
+            onSwitchView={handleViewSwitch}
+            toggleChat={toggleChat}
+          />
+        </>
+      ) : (
+        <>
+          <Header
+            title={title}
+            subtitle={subtitle}
+            toggleChat={toggleChat}
+            showCloseButton={showCloseButton}
+            titleAvatar={titleAvatar}
+          />
+          <Messages
+            profileAvatar={profileAvatar}
+            profileClientAvatar={profileClientAvatar}
+            showTimeStamp={showTimeStamp}
+          />
+
+          <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
+          {emojis && pickerStatus && (
+            <Picker
+              style={{
+                position: "absolute",
+                bottom: pickerOffset,
+                left: "0",
+                width: "100%",
+              }}
+              onSelect={onSelectEmoji}
+            />
+          )}
+          <Sender
+            ref={senderRef}
+            sendMessage={handlerSendMsn}
+            placeholder={senderPlaceHolder}
+            disabledInput={disabledInput}
+            autofocus={autofocus}
+            onTextInputChange={onTextInputChange}
+            buttonAlt={sendButtonAlt}
+            onPressEmoji={togglePicker}
+            onChangeSize={setOffset}
+          />
+        </>
+      )}
     </div>
   );
 }

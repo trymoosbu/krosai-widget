@@ -1,10 +1,10 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
-import { toggleChat, addUserMessage } from '../../store/actions';
-import { isWidgetOpened } from '../../store/dispatcher';
-import { AnyFunction } from '../../utils/types';
+import { toggleChat, addUserMessage } from "../../store/actions";
+import { isWidgetOpened } from "../../store/dispatcher";
+import { AnyFunction } from "../../utils/types";
 
-import WidgetLayout from './layout';
+import WidgetLayout from "./layout";
 
 type Props = {
   title: string;
@@ -34,7 +34,7 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   emojis?: boolean;
-}
+};
 
 function Widget({
   title,
@@ -63,29 +63,29 @@ function Widget({
   handleSubmit,
   showBadge,
   resizable,
-  emojis
+  emojis,
 }: Props) {
   const dispatch = useDispatch();
 
   const toggleConversation = () => {
     dispatch(toggleChat());
     handleToggle ? handleToggle(isWidgetOpened()) : null;
-  }
+  };
 
   const handleMessageSubmit = (userInput) => {
-    if (!userInput.trim()) {      
-      return;      
+    if (!userInput.trim()) {
+      return;
     }
 
     handleSubmit?.(userInput);
     dispatch(addUserMessage(userInput));
     handleNewUserMessage(userInput);
-  }
+  };
 
   const onQuickButtonClicked = (event, value) => {
     event.preventDefault();
-    handleQuickButtonClicked?.(value)
-  }
+    handleQuickButtonClicked?.(value);
+  };
 
   return (
     <WidgetLayout

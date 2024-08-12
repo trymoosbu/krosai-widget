@@ -22,17 +22,22 @@
 }
 
 @mixin title-fs {
-  padding: 0 0 15px 0;
+  padding: 0 0 0 0;
 }
 
 @mixin close-button-fs {
-  background-color: $turqois-1;
+  background-color: $primary;
   border: 0;
+  border-radius: 50%;
   display: block;
-  position: absolute;
+  margin-top: auto;
+  margin-bottom: auto;
   right: 10px;
   top: 20px;
-  width: 40px;
+  width: 32px;
+  height: 32px;
+  color: $black;
+  margin-left: 5px;
 }
 
 @mixin close-fs {

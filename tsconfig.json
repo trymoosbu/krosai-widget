@@ -14,15 +14,11 @@
     "target": "es6",
     "jsx": "react-jsx",
     "allowJs": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
   "extends": "./tsconfig.paths.json",
-  "include": ["src"],
+  "include": ["src", "custom.d.ts"],
   "exclude": ["node_modules", "lib"]
 }

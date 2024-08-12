@@ -1,86 +1,107 @@
-'use strict'
+"use strict";
 
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const autoprefixer = require('autoprefixer');
+const webpack = require("webpack");
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const autoprefixer = require("autoprefixer");
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, 'dev/main.tsx'),
-    vendor: ['react', 'react-dom']
+    main: path.resolve(__dirname, "dev/main.tsx"),
+    vendor: ["react", "react-dom"],
   },
-  target: 'web',
-  mode: 'development',
+  target: "web",
+  mode: "development",
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
+    inline: false,
+    contentBase: path.resolve(__dirname, "dist"),
     compress: false,
-    host: '0.0.0.0',
-    port: 3000,
-    hot: true
+    host: "0.0.0.0",
+    port: 4000,
+    hot: true,
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js']
+    extensions: [".tsx", ".ts", ".js"],
   },
   module: {
     rules: [
       {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'ts-loader']
+        use: ["babel-loader", "ts-loader"],
       },
       {
         enforce: "pre",
         test: /\.js$/,
-        loader: "source-map-loader"
+        type: "javascript/auto",
+        loader: "source-map-loader",
       },
       {
+        type: "javascript/auto",
         test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
+        loader: "babel-loader",
+        exclude: /node_modules/,
       },
       {
+        test: /\.svg$/,
+        loader: "svg-inline-loader",
+      },
+      {
+        test: /\.svg$/,
+        loader: "svg-inline-loader",
+      },
+      {
+        type: "javascript/auto",
         test: /\.scss$/,
         exclude: /node_modules/,
         use: [
-          'style-loader',
-          'css-loader',
+          "style-loader",
+          "css-loader",
           {
-            loader: 'postcss-loader',
+            loader: "postcss-loader",
             options: {
               postcssOptions: {
-                plugins: ['postcss-preset-env']
-              }
-            }
+                plugins: ["postcss-preset-env"],
+              },
+            },
           },
           {
-            loader: 'sass-loader',
+            loader: "sass-loader",
             options: {
-              implementation: require('node-sass'),
+              implementation: require("sass"),
               sassOptions: {
-                includePaths: [path.resolve(__dirname, 'src/scss/')]
-              }
-            }
-          }
-        ]
+                includePaths: [path.resolve(__dirname, "src/scss/")],
+              },
+            },
+          },
+        ],
       },
       {
-        test: /\.(jpg|png|gif|svg)$/,
-        type: 'asset/inline'
-      }
-    ]
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "assets/",
+            },
+          },
+        ],
+        // type: "asset/inline",
+      },
+    ],
   },
-  devtool: 'inline-source-map',
+  devtool: "inline-source-map",
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: './dev/index.html'
+      template: "./dev/index.html",
     }),
     new webpack.ProvidePlugin({
-      'React': 'react'
-    })
+      React: "react",
+    }),
   ],
   performance: {
-    hints: false
-  }
+    hints: false,
+  },
 };

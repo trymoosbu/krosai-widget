@@ -1,6 +1,6 @@
-@import 'common';
-@import 'variables/colors';
-@import 'animation';
+@import "/src/scss/common";
+@import "/src/scss/variables/colors";
+@import "/src/scss/animation";
 @import "~emoji-mart/css/emoji-mart.css";
 
 .rcw-conversation-container {

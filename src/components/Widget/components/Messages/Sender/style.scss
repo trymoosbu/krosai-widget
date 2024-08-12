@@ -1,4 +1,4 @@
-@import 'variables/colors';
+@import "/src/scss/variables/colors";
 
 .rcw-sender {
   align-items: flex-end;
@@ -50,11 +50,12 @@
 
   &[placeholder]:empty::before {
     content: attr(placeholder);
-    color: $grey-0; 
+    color: $grey-0;
   }
 }
 
-.rcw-send, .rcw-picker-btn {
+.rcw-send,
+.rcw-picker-btn {
   background: $grey-2;
   border: 0;
   cursor: pointer;
@@ -69,7 +70,7 @@
   cursor: not-allowed;
 }
 
-@media screen and (max-width: 800px)  {
+@media screen and (max-width: 800px) {
   .rcw-sender {
     border-radius: 0;
     flex-shrink: 0;

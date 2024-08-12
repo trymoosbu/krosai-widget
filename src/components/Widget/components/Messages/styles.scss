@@ -1,5 +1,5 @@
-@import 'variables/colors';
-@import 'common';
+@import "variables/colors";
+@import "common";
 
 .rcw-messages-container {
   background-color: $white;
@@ -11,13 +11,12 @@
 }
 
 .rcw-full-screen {
-
   .rcw-messages-container {
     @include messages-container-fs;
   }
 }
 
-@media screen and (max-width: 800px)  {
+@media screen and (max-width: 800px) {
   .rcw-messages-container {
     @include messages-container-fs;
   }
