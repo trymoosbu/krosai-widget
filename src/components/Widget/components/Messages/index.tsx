@@ -5,6 +5,7 @@ import {
   ElementRef,
   ImgHTMLAttributes,
   MouseEvent,
+  useCallback,
 } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import format from "date-fns/format";
@@ -21,6 +22,8 @@ import { MESSAGE_SENDER } from "../../../../constants";
 
 import Loader from "./components/Loader";
 import "./styles.scss";
+import { io } from "socket.io-client";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 
 type Props = {
   showTimeStamp: boolean;
@@ -34,25 +37,44 @@ function Messages({
   showTimeStamp,
 }: Props) {
   const dispatch = useDispatch();
-  const { messages, typing, showChat, badgeCount } = useSelector(
-    (state: GlobalState) => ({
-      messages: state.messages.messages,
-      badgeCount: state.messages.badgeCount,
-      typing: state.behavior.messageLoader,
-      showChat: state.behavior.showChat,
-    })
-  );
+  const { messages, typing, showChat } = useSelector((state: GlobalState) => ({
+    messages: state.messages.messages,
+    typing: state.behavior.messageLoader,
+    showChat: state.behavior.showChat,
+  }));
+  const [badgeCount, setBadgeCount] = useState(0);
 
   const messageRef = useRef<HTMLDivElement | null>(null);
+
+  const [socketUrl, setSocketUrl] = useState(
+    "wss://krosai.azurewebsites.net/agent/ws/chat/36383"
+  );
+  const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      setMessageHistory((prev) => prev.concat(lastMessage));
+    }
+  }, [lastMessage]);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
+  console.log(connectionStatus);
+
   useEffect(() => {
     // @ts-ignore
     scrollToBottom(messageRef.current);
-    if (showChat && badgeCount) dispatch(markAllMessagesRead());
-    else
-      dispatch(
-        setBadgeCount(messages.filter((message) => message.unread).length)
-      );
-  }, [messages, badgeCount, showChat]);
+    const unreadMessages = messages.filter((message) => message.unread).length;
+    setBadgeCount(unreadMessages);
+  }, [messages, badgeCount]);
 
   const getComponentToRender = (
     message: MessageTypes | Link | CustomCompMessage
@@ -105,7 +127,7 @@ function Messages({
           {getComponentToRender(message)}
         </div>
       ))}
-      <Loader typing={typing} />
+      <Loader typing={false} />
     </div>
   );
 }

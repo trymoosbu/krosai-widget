@@ -1,19 +1,27 @@
 import { useRef, useState, useEffect } from "react";
 import { Picker } from "emoji-mart";
 import cn from "classnames";
-
 import QuickButtons from "../Messages/QuickButtons";
-
 import { AnyFunction } from "../../../../utils/types";
-
 import "./style.scss";
 import Home from "../Home";
 import Sender from "../Messages/Sender";
 import Messages from "../Messages";
-
 import Avatar from "../../../../../assets/widget-logo.png";
 import LogoIcon from "../../../../../assets/LogoIcon.png";
 import Header from "../Header";
+import { io } from "socket.io-client";
+
+// Default Message Component
+const DefaultMessageComponent: React.FC<{
+  message: string;
+  showTimeStamp: boolean;
+}> = ({ message, showTimeStamp }) => (
+  <div>
+    <p>{message}</p>
+    {showTimeStamp && <span>{new Date().toLocaleTimeString()}</span>}
+  </div>
+);
 
 interface ISenderRef {
   onSelectEmoji: (event: any) => void;
