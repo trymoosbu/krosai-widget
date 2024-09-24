@@ -39,6 +39,7 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   emojis?: boolean;
+  widget_id: number;
 };
 
 function WidgetLayout({
@@ -68,6 +69,7 @@ function WidgetLayout({
   showBadge,
   resizable,
   emojis,
+  widget_id,
 }: Props) {
   const dispatch = useDispatch();
   const { dissableInput, showChat, visible } = useSelector(
@@ -158,6 +160,7 @@ function WidgetLayout({
           showTimeStamp={showTimeStamp}
           resizable={resizable}
           emojis={emojis}
+          widget_id={widget_id}
         />
       )}
       {customLauncher

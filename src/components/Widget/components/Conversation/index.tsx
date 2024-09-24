@@ -46,6 +46,7 @@ type ConversationProps = {
   showTimeStamp: boolean;
   resizable?: boolean;
   emojis?: boolean;
+  widget_id: number;
 };
 
 function Conversation({
@@ -67,6 +68,7 @@ function Conversation({
   showTimeStamp,
   resizable,
   emojis,
+  widget_id,
 }: ConversationProps) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   const [currentView, setCurrentView] = useState<"home" | "messages">("home");
@@ -157,6 +159,7 @@ function Conversation({
             profileAvatar={profileAvatar}
             profileClientAvatar={profileClientAvatar}
             showTimeStamp={showTimeStamp}
+            widget_id={widget_id}
           />
 
           <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />

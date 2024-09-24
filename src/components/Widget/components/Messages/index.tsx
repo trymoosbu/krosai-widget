@@ -29,12 +29,14 @@ type Props = {
   showTimeStamp: boolean;
   profileAvatar?: string;
   profileClientAvatar?: string;
+  widget_id: number;
 };
 
 function Messages({
   profileAvatar,
   profileClientAvatar,
   showTimeStamp,
+  widget_id,
 }: Props) {
   const dispatch = useDispatch();
   const { messages, typing, showChat } = useSelector((state: GlobalState) => ({
@@ -47,7 +49,7 @@ function Messages({
   const messageRef = useRef<HTMLDivElement | null>(null);
 
   const [socketUrl, setSocketUrl] = useState(
-    "wss://krosai.azurewebsites.net/agent/ws/chat/36383"
+    `wss://krosai.azurewebsites.net/agent/ws/chat/${widget_id}`
   );
   const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
 
