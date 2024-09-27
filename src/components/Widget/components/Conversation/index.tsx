@@ -7,8 +7,6 @@ import "./style.scss";
 import Home from "../Home";
 import Sender from "../Messages/Sender";
 import Messages from "../Messages";
-import Avatar from "../../../../../assets/widget-logo.png";
-import LogoIcon from "../../../../../assets/LogoIcon.png";
 import Header from "../Header";
 import { io } from "socket.io-client";
 
@@ -47,6 +45,8 @@ type ConversationProps = {
   resizable?: boolean;
   emojis?: boolean;
   widget_id: number;
+  avatar: string;
+  logoIcon: string;
 };
 
 function Conversation({
@@ -62,6 +62,7 @@ function Conversation({
   profileAvatar,
   profileClientAvatar,
   titleAvatar,
+  avatar,
   onQuickButtonClicked,
   onTextInputChange,
   sendButtonAlt,
@@ -69,6 +70,7 @@ function Conversation({
   resizable,
   emojis,
   widget_id,
+  logoIcon,
 }: ConversationProps) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   const [currentView, setCurrentView] = useState<"home" | "messages">("home");
@@ -138,9 +140,9 @@ function Conversation({
           <Home
             title={title}
             subtitle={subtitle}
-            avatar={Avatar}
+            avatar={avatar}
             footerText="Powered by"
-            footerIcon={LogoIcon}
+            footerIcon={logoIcon}
             footerCN="KrosAI"
             onSwitchView={handleViewSwitch}
             toggleChat={toggleChat}

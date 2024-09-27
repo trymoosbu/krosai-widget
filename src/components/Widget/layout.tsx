@@ -40,6 +40,8 @@ type Props = {
   resizable?: boolean;
   emojis?: boolean;
   widget_id: number;
+  avatar: string;
+  logoIcon: string;
 };
 
 function WidgetLayout({
@@ -70,6 +72,8 @@ function WidgetLayout({
   resizable,
   emojis,
   widget_id,
+  avatar,
+  logoIcon,
 }: Props) {
   const dispatch = useDispatch();
   const { dissableInput, showChat, visible } = useSelector(
@@ -142,6 +146,8 @@ function WidgetLayout({
     >
       {showChat && (
         <Conversation
+          avatar={avatar}
+          logoIcon={logoIcon}
           title={title}
           subtitle={subtitle}
           sendMessage={onSendMessage}

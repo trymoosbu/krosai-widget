@@ -6,6 +6,9 @@ import store from "./store";
 
 import { AnyFunction } from "./utils/types";
 
+import Avatar from "../assets/widget-logo.png";
+import LogoIcon from "../assets/LogoIcon.png";
+
 type Props = {
   handleNewUserMessage: AnyFunction;
   handleQuickButtonClicked?: AnyFunction;
@@ -35,6 +38,8 @@ type Props = {
   showBadge?: boolean;
   resizable?: boolean;
   widget_id?: number;
+  avatar: string;
+  logoIcon: string;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -66,6 +71,8 @@ function ConnectedWidget({
   resizable,
   emojis,
   widget_id,
+  avatar,
+  logoIcon,
 }: Props) {
   return (
     <Provider store={store}>
@@ -98,12 +105,16 @@ function ConnectedWidget({
         resizable={resizable}
         emojis={emojis}
         widget_id={widget_id}
+        logoIcon={logoIcon}
+        avatar={avatar}
       />
     </Provider>
   );
 }
 
 const defaultProps = {
+  avatar: `${Avatar}`,
+  logoIcon: `${LogoIcon}`,
   title: "Welcome",
   subtitle: "This is your chat subtitle",
   senderPlaceHolder: "Type a message...",

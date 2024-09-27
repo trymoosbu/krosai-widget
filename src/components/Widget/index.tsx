@@ -35,6 +35,8 @@ type Props = {
   resizable?: boolean;
   emojis?: boolean;
   widget_id: number;
+  avatar: string;
+  logoIcon: string;
 };
 
 function Widget({
@@ -66,6 +68,8 @@ function Widget({
   resizable,
   emojis,
   widget_id,
+  avatar,
+  logoIcon,
 }: Props) {
   const dispatch = useDispatch();
 
@@ -91,6 +95,8 @@ function Widget({
 
   return (
     <WidgetLayout
+      avatar={avatar}
+      logoIcon={logoIcon}
       onToggleConversation={toggleConversation}
       onSendMessage={handleMessageSubmit}
       onQuickButtonClicked={onQuickButtonClicked}
