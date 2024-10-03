@@ -23,12 +23,38 @@
     font-size: 14px;
   }
 
-  .rcw-close-button {
-    display: none;
+  .chatsession_content {
+    position: absolute;
+    top: 15%;
+    left: 30px;
+    width: 300px;
+    height: auto;
+    padding: 10px;
+    border-radius: 10px;
+    background: white;
+    z-index: 20;
+    overflow: scroll;
   }
 
   .rcw-header-action {
     display: flex;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+  }
+
+  .chatsession_btn {
+    background: transparent;
+    color: $primary;
+    border: none;
+    cursor: pointer;
   }
 
   .rcw-call-button {

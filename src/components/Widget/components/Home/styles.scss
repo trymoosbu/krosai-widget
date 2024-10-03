@@ -38,9 +38,7 @@
 }
 .action-button {
   padding: 30px;
-  color: $primary;
   border-radius: 9999px;
-  background-color: $black;
   border: 0;
 }
 
@@ -62,6 +60,8 @@
 }
 .w-subtitle {
   color: $grey-0;
+  max-width: 150px;
+  max-height: 30px;
 }
 .avatar {
   width: 180px;

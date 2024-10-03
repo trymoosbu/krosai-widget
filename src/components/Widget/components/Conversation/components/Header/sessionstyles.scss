@@ -1,0 +1,19 @@
+.container {
+  width: 100%;
+  padding: 16px 0px 16px 0px;
+  border-bottom: 1px gray solid;
+
+  h1 {
+    font-size: 14px;
+    color: black;
+    margin: auto 5px auto 5px;
+  }
+}
+
+.container_active {
+  background-color: #efefef;
+}
+
+.container:hover {
+  background-color: #efefef;
+}

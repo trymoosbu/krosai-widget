@@ -8,6 +8,19 @@ import { AnyFunction } from "./utils/types";
 
 import Avatar from "../assets/widget-logo.png";
 import LogoIcon from "../assets/LogoIcon.png";
+import { useGetWidget } from "./components/Widget/components/api/Widget";
+import { useEffect, useState } from "react";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import { setCookie } from "cookies-next";
+
+export type widgetProps = {
+  id: number;
+  name: string;
+  description: string;
+  background_color: string;
+  icon_color: string;
+  logo: string;
+};
 
 type Props = {
   handleNewUserMessage: AnyFunction;
@@ -37,7 +50,7 @@ type Props = {
   handleSubmit?: AnyFunction;
   showBadge?: boolean;
   resizable?: boolean;
-  widget_id?: number;
+  widget_id?: string;
   avatar: string;
   logoIcon: string;
 } & typeof defaultProps;
@@ -74,12 +87,44 @@ function ConnectedWidget({
   avatar,
   logoIcon,
 }: Props) {
+  const [socketUrl, setSocketUrl] = useState(
+    `wss://krosai.azurewebsites.net/agent/ws/chat/${widget_id}`
+  );
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      setMessageHistory((prev) => prev.concat(lastMessage));
+    }
+  }, [lastMessage]);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
+  console.log(connectionStatus);
+
+  const data: widgetProps = useGetWidget(widget_id as string); //get widget
+
+  useEffect(() => {
+    if (data) {
+      setCookie("assistant_id", data?.id);
+      console.log(data?.id);
+    }
+  }, [data]);
+
   return (
     <Provider store={store}>
       <Widget
-        title={title}
+        title={data?.name as string}
         titleAvatar={titleAvatar}
-        subtitle={subtitle}
+        subtitle={data?.description}
         handleNewUserMessage={handleNewUserMessage}
         handleQuickButtonClicked={handleQuickButtonClicked}
         senderPlaceHolder={senderPlaceHolder}
@@ -104,9 +149,10 @@ function ConnectedWidget({
         showBadge={showBadge}
         resizable={resizable}
         emojis={emojis}
-        widget_id={widget_id}
         logoIcon={logoIcon}
-        avatar={avatar}
+        avatar={data?.logo}
+        background_color={data?.background_color}
+        icon_color={data?.icon_color}
       />
     </Provider>
   );
@@ -131,7 +177,7 @@ const defaultProps = {
   imagePreview: false,
   zoomStep: 80,
   showBadge: true,
-  widget_id: 1,
+  widget_id: "Kros20240930093547",
 };
 ConnectedWidget.defaultProps = defaultProps;
 

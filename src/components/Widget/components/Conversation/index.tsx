@@ -44,9 +44,10 @@ type ConversationProps = {
   showTimeStamp: boolean;
   resizable?: boolean;
   emojis?: boolean;
-  widget_id: number;
   avatar: string;
   logoIcon: string;
+  background_color: string;
+  icon_color: string;
 };
 
 function Conversation({
@@ -69,14 +70,19 @@ function Conversation({
   showTimeStamp,
   resizable,
   emojis,
-  widget_id,
   logoIcon,
+  background_color,
+  icon_color,
 }: ConversationProps) {
   const [containerDiv, setContainerDiv] = useState<HTMLElement | null>();
   const [currentView, setCurrentView] = useState<"home" | "messages">("home");
 
   const handleViewSwitch = (view: "home" | "messages") => {
     setCurrentView(view);
+  };
+
+  const handleToggleChat = () => {
+    setCurrentView("home");
   };
 
   let startX, startWidth;
@@ -145,7 +151,8 @@ function Conversation({
             footerIcon={logoIcon}
             footerCN="KrosAI"
             onSwitchView={handleViewSwitch}
-            toggleChat={toggleChat}
+            background_color={background_color}
+            icon_color={icon_color}
           />
         </>
       ) : (
@@ -153,7 +160,7 @@ function Conversation({
           <Header
             title={title}
             subtitle={subtitle}
-            toggleChat={toggleChat}
+            toggleChat={handleToggleChat}
             showCloseButton={showCloseButton}
             titleAvatar={titleAvatar}
           />
@@ -161,7 +168,6 @@ function Conversation({
             profileAvatar={profileAvatar}
             profileClientAvatar={profileClientAvatar}
             showTimeStamp={showTimeStamp}
-            widget_id={widget_id}
           />
 
           <QuickButtons onQuickButtonClicked={onQuickButtonClicked} />
