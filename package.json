@@ -1,12 +1,12 @@
 {
   "name": "krosai-widget",
   "version": "3.1.4",
-  "description": "Chat web widget for React apps",
-  "main": "lib/index.js",
+  "description": "KrosAI chat widget for react applications",
+  "main": "./index.js",
   "repository": "",
   "author": "KrosAI Team",
   "license": "MIT",
-  "types": "./lib/index.d.ts",
+  "types": "./index.d.ts",
   "scripts": {
     "start": "webpack serve --config webpack.config.dev.js",
     "build": "webpack --config ./webpack.config.prod.js",
