@@ -4,7 +4,7 @@ const webpack = require("webpack");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = {
   entry: "./index.js",
@@ -58,7 +58,7 @@ module.exports = {
           {
             loader: "sass-loader",
             options: {
-              implementation: require("sass"),
+              implementation: require("node-sass"),
               sassOptions: {
                 includePaths: [path.resolve(__dirname, "src/scss/")],
               },
@@ -66,23 +66,18 @@ module.exports = {
           },
         ],
       },
+      // Updated rule for handling image assets
       {
-        test: /\.(png|svg|jpe?g|gif)$/i,
+        test: /\.(jpg|png|gif|svg)$/,
         use: [
           {
             loader: "file-loader",
             options: {
-              name: "[name].[ext]",
-              outputPath: "assets/",
+              name: "[path][name].[ext]",
             },
           },
         ],
-        // type: "asset/inline",
       },
-      // {
-      //   test: /\.(jpg|png|gif|svg)$/,
-      //   type: "asset/inline",
-      // },
     ],
   },
   plugins: [
@@ -112,13 +107,13 @@ module.exports = {
       amd: "react-dom",
     },
   },
-  // optimization: {
-  //   minimizer: [
-  //     new UglifyJsPlugin({
-  //       cache: true,
-  //       parallel: true,
-  //     }),
-  //     new OptimizeCSSAssetsPlugin({}),
-  //   ],
-  // },
+  optimization: {
+    minimizer: [
+      // new UglifyJsPlugin({
+      //   cache: true,
+      //   parallel: true,
+      // }),
+      new OptimizeCSSAssetsPlugin({}),
+    ],
+  },
 };

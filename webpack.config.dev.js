@@ -13,11 +13,10 @@ module.exports = {
   target: "web",
   mode: "development",
   devServer: {
-    inline: false,
     contentBase: path.resolve(__dirname, "dist"),
     compress: false,
     host: "0.0.0.0",
-    port: 4000,
+    port: 3000,
     hot: true,
   },
   resolve: {
@@ -33,25 +32,14 @@ module.exports = {
       {
         enforce: "pre",
         test: /\.js$/,
-        type: "javascript/auto",
         loader: "source-map-loader",
       },
       {
-        type: "javascript/auto",
         test: /\.js$/,
         loader: "babel-loader",
         exclude: /node_modules/,
       },
       {
-        test: /\.svg$/,
-        loader: "svg-inline-loader",
-      },
-      {
-        test: /\.svg$/,
-        loader: "svg-inline-loader",
-      },
-      {
-        type: "javascript/auto",
         test: /\.scss$/,
         exclude: /node_modules/,
         use: [
@@ -68,7 +56,7 @@ module.exports = {
           {
             loader: "sass-loader",
             options: {
-              implementation: require("sass"),
+              implementation: require("node-sass"),
               sassOptions: {
                 includePaths: [path.resolve(__dirname, "src/scss/")],
               },
@@ -77,17 +65,8 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpe?g|gif)$/i,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: "[name].[ext]",
-              outputPath: "assets/",
-            },
-          },
-        ],
-        // type: "asset/inline",
+        test: /\.(jpg|png|gif|svg)$/,
+        type: "asset/inline",
       },
     ],
   },
