@@ -3,8 +3,7 @@
 const webpack = require("webpack");
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-// const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
   entry: "./index.js",
@@ -81,10 +80,6 @@ module.exports = {
     ],
   },
   plugins: [
-    /**
-     * Known issue for the CSS Extract Plugin in Ubuntu 16.04: You'll need to install
-     * the following package: sudo apt-get install libpng16-dev
-     */
     new MiniCssExtractPlugin({
       filename: "styles.css",
       chunkFilename: "[id].css",
@@ -108,12 +103,7 @@ module.exports = {
     },
   },
   optimization: {
-    minimizer: [
-      // new UglifyJsPlugin({
-      //   cache: true,
-      //   parallel: true,
-      // }),
-      new OptimizeCSSAssetsPlugin({}),
-    ],
+    minimize: true,
+    minimizer: [new CssMinimizerPlugin()],
   },
 };
