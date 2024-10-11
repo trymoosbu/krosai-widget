@@ -75,7 +75,6 @@ function Messages({
     setLoading(true);
 
     try {
-      // Make the POST request
       const response = await fetch(
         "https://krosai.azurewebsites.net/chat_session/",
         {
@@ -93,9 +92,6 @@ function Messages({
 
       const res = await response.json();
       console.log(res);
-      // setChatSessionExists(true);
-      // setCurrentSessionId(res.id);
-      // setSessionInfo({ id: res.id, name: res.name || "New Chat Session" });
     } catch (error) {
       console.error("Error creating session:", error);
       throw error;

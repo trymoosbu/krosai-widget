@@ -52,7 +52,7 @@ type Props = {
   resizable?: boolean;
   widget_id?: string;
   avatar: string;
-  logoIcon: string;
+  footerIcon: string;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -85,7 +85,7 @@ function ConnectedWidget({
   emojis,
   widget_id,
   avatar,
-  logoIcon,
+  footerIcon,
 }: Props) {
   const [socketUrl, setSocketUrl] = useState(
     `wss://krosai.azurewebsites.net/agent/ws/chat/${widget_id}`
@@ -149,7 +149,7 @@ function ConnectedWidget({
         showBadge={showBadge}
         resizable={resizable}
         emojis={emojis}
-        logoIcon={logoIcon}
+        footerIcon={footerIcon}
         avatar={data?.logo}
         background_color={data?.background_color}
         icon_color={data?.icon_color}
@@ -160,7 +160,7 @@ function ConnectedWidget({
 
 const defaultProps = {
   avatar: `${Avatar}`,
-  logoIcon: `${LogoIcon}`,
+  footerIcon: `${LogoIcon}`,
   title: "Welcome",
   subtitle: "This is your chat subtitle",
   senderPlaceHolder: "Type a message...",

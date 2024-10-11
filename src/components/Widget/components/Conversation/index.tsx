@@ -45,7 +45,7 @@ type ConversationProps = {
   resizable?: boolean;
   emojis?: boolean;
   avatar: string;
-  logoIcon: string;
+  footerIcon: string;
   background_color: string;
   icon_color: string;
 };
@@ -70,7 +70,7 @@ function Conversation({
   showTimeStamp,
   resizable,
   emojis,
-  logoIcon,
+  footerIcon,
   background_color,
   icon_color,
 }: ConversationProps) {
@@ -148,7 +148,7 @@ function Conversation({
             subtitle={subtitle}
             avatar={avatar}
             footerText="Powered by"
-            footerIcon={logoIcon}
+            footerIcon={footerIcon}
             footerCN="KrosAI"
             onSwitchView={handleViewSwitch}
             background_color={background_color}

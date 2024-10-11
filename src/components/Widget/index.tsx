@@ -35,7 +35,7 @@ type Props = {
   resizable?: boolean;
   emojis?: boolean;
   avatar: string;
-  logoIcon: string;
+  footerIcon: string;
   background_color: string;
   icon_color: string;
 };
@@ -69,7 +69,7 @@ function Widget({
   resizable,
   emojis,
   avatar,
-  logoIcon,
+  footerIcon,
   background_color,
   icon_color,
 }: Props) {
@@ -98,7 +98,7 @@ function Widget({
   return (
     <WidgetLayout
       avatar={avatar}
-      logoIcon={logoIcon}
+      footerIcon={footerIcon}
       onToggleConversation={toggleConversation}
       onSendMessage={handleMessageSubmit}
       onQuickButtonClicked={onQuickButtonClicked}

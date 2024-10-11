@@ -40,7 +40,7 @@ type Props = {
   resizable?: boolean;
   emojis?: boolean;
   avatar: string;
-  logoIcon: string;
+  footerIcon: string;
   background_color: string;
   icon_color: string;
 };
@@ -73,7 +73,7 @@ function WidgetLayout({
   resizable,
   emojis,
   avatar,
-  logoIcon,
+  footerIcon,
   background_color,
   icon_color,
 }: Props) {
@@ -149,7 +149,7 @@ function WidgetLayout({
       {showChat && (
         <Conversation
           avatar={avatar}
-          logoIcon={logoIcon}
+          footerIcon={footerIcon}
           title={title}
           subtitle={subtitle}
           sendMessage={onSendMessage}

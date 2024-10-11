@@ -115,9 +115,9 @@ function Home({
           </div>
           <h1 className="footer-text">
             {footerText}
-            <span className="footer-logo-container">
+            {/* <span className="footer-logo-container">
               <img className="footer-logo" src={footerIcon} />
-            </span>
+            </span> */}
             {footerCN}
           </h1>
         </div>
