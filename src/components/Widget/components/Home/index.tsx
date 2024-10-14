@@ -67,12 +67,15 @@ function Home({
               <img src={avatar} className="avatar" alt="profile" />
             </div>
             <h4 className="w-title">{title}</h4>
-            <span className="w-subtitle">{subtitle}</span>
+            <div>
+              <span className="w-subtitle">{subtitle}</span>
+            </div>
           </div>
 
           <div className="action-button-container">
             <div>
               <button
+                title="coming soon"
                 style={{ backgroundColor: background_color }}
                 className="action-button"
               >
@@ -115,10 +118,7 @@ function Home({
           </div>
           <h1 className="footer-text">
             {footerText}
-            <span className="footer-logo-container">
-              <img className="footer-logo" src={footerIcon} />
-            </span>
-            {footerCN}
+            <img className="footer-logo" src={footerIcon} />
           </h1>
         </div>
       </div>

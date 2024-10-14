@@ -7,7 +7,7 @@ import { setBadgeCount } from "../../../../store/actions";
 
 import "./style.scss";
 
-import openLauncher from "../../../../../assets/widget-logo.png";
+// import openLauncher from "../../../../../assets/widget-logo.png";
 
 type Props = {
   toggle: () => void;
@@ -17,9 +17,17 @@ type Props = {
   closeImg: string;
   openImg: string;
   showBadge?: boolean;
+  openLauncher: string;
 };
 
-function Launcher({ toggle, chatId, openImg, closeLabel, showBadge }: Props) {
+function Launcher({
+  toggle,
+  chatId,
+  openImg,
+  closeLabel,
+  showBadge,
+  openLauncher,
+}: Props) {
   const dispatch = useDispatch();
   const { showChat, badgeCount } = useSelector((state: GlobalState) => ({
     showChat: state.behavior.showChat,

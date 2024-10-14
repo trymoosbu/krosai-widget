@@ -60,8 +60,6 @@
 }
 .w-subtitle {
   color: $grey-0;
-  max-width: 150px;
-  max-height: 30px;
 }
 .avatar {
   width: 180px;
@@ -79,17 +77,12 @@
   font-size: 16px;
   color: $grey-0;
 }
-.footer-logo-container {
+.footer-logo {
+  width: auto;
+  height: 18px;
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 8px;
-  margin-right: 8px;
-}
-.footer-logo {
-  width: 16px;
-  height: 16px;
-  margin-top: auto;
-  margin-bottom: auto;
 }
 
 .rcw-full-screen {

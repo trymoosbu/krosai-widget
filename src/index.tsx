@@ -7,7 +7,7 @@ import store from "./store";
 import { AnyFunction } from "./utils/types";
 
 import Avatar from "../assets/widget-logo.png";
-import LogoIcon from "../assets/LogoIcon.png";
+import footerIcon from "../assets/logo_black.png";
 import { useGetWidget } from "./components/Widget/components/api/Widget";
 import { useEffect, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
@@ -52,7 +52,7 @@ type Props = {
   resizable?: boolean;
   widget_id?: string;
   avatar: string;
-  logoIcon: string;
+  // footerIcon: string;
 } & typeof defaultProps;
 
 function ConnectedWidget({
@@ -85,8 +85,8 @@ function ConnectedWidget({
   emojis,
   widget_id,
   avatar,
-  logoIcon,
-}: Props) {
+}: // footerIcon,
+Props) {
   const [socketUrl, setSocketUrl] = useState(
     `wss://krosai.azurewebsites.net/agent/ws/chat/${widget_id}`
   );
@@ -123,7 +123,7 @@ function ConnectedWidget({
     <Provider store={store}>
       <Widget
         title={data?.name as string}
-        titleAvatar={titleAvatar}
+        titleAvatar={data?.logo}
         subtitle={data?.description}
         handleNewUserMessage={handleNewUserMessage}
         handleQuickButtonClicked={handleQuickButtonClicked}
@@ -149,10 +149,11 @@ function ConnectedWidget({
         showBadge={showBadge}
         resizable={resizable}
         emojis={emojis}
-        logoIcon={logoIcon}
+        footerIcon={footerIcon}
         avatar={data?.logo}
         background_color={data?.background_color}
         icon_color={data?.icon_color}
+        openLauncher={data?.logo}
       />
     </Provider>
   );
@@ -160,7 +161,7 @@ function ConnectedWidget({
 
 const defaultProps = {
   avatar: `${Avatar}`,
-  logoIcon: `${LogoIcon}`,
+  footerIcon: `${footerIcon}`,
   title: "Welcome",
   subtitle: "This is your chat subtitle",
   senderPlaceHolder: "Type a message...",

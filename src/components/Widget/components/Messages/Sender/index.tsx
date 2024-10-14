@@ -4,12 +4,12 @@ import {
   useState,
   forwardRef,
   useImperativeHandle,
+  MouseEvent,
 } from "react";
 import { useSelector } from "react-redux";
 import cn from "classnames";
 
 import { GlobalState } from "src/store/types";
-
 import {
   getCaretIndex,
   isFirefox,
@@ -20,15 +20,18 @@ import {
 const brRegex = /<br>/g;
 
 import "./style.scss";
+import { getCookie } from "cookies-next";
+import { GetChatSessions } from "../../api/Chatsession";
+import { v4 as uuidv4 } from "uuid";
 
 type Props = {
   placeholder: string;
   disabledInput: boolean;
   autofocus: boolean;
-  sendMessage: (event: any) => void;
+  sendMessage: (message: string, sessionId: string | null) => void; // Updated to send session ID
   buttonAlt: string;
   onPressEmoji: () => void;
-  onChangeSize: (event: any) => void;
+  onChangeSize: (height: number) => void;
   onTextInputChange?: (event: any) => void;
 };
 
@@ -51,32 +54,100 @@ function Sender(
   const [enter, setEnter] = useState(false);
   const [firefox, setFirefox] = useState(false);
   const [height, setHeight] = useState(0);
-  // @ts-ignore
-  useEffect(() => {
-    if (showChat && autofocus) inputRef.current?.focus();
-  }, [showChat]);
-  useEffect(() => {
-    setFirefox(isFirefox());
-  }, []);
+  const [loading, setLoading] = useState(false);
+  const [chatSessionExists, setChatSessionExists] = useState(false);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
 
+  const assistantID = getCookie("assistant_id") as unknown;
+
+  const { chatSessions, error } = GetChatSessions(assistantID as number);
+
+  useEffect(() => {
+    if (chatSessions && chatSessions.length > 0) {
+      setChatSessionExists(true);
+      setCurrentSessionId(chatSessions[0].id);
+    }
+  }, [chatSessions]);
+
+  const getIPAddress = async () => {
+    try {
+      const response = await fetch("https://api.ipify.org?format=json");
+      const data = await response.json();
+      return data?.ip;
+    } catch (error) {
+      console.error("Failed to fetch IP address:", error);
+      return "0.0.0.0";
+    }
+  };
+
+  const handleCreateChatSession = async () => {
+    if (chatSessionExists) {
+      return;
+    }
+    console.log(chatSessionExists);
+
+    const ip_address = await getIPAddress();
+    const session_identifier = uuidv4();
+
+    const values = {
+      assistant_id: assistantID,
+      session_identifier: session_identifier,
+      user_agent: navigator.userAgent,
+      ip_address: ip_address,
+      summary: "",
+      sentiment: "",
+      call_type: "chat",
+      email: "",
+      name: "",
+      ended_at: null,
+    };
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://krosai.azurewebsites.net/chat_session/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to create chat session");
+      }
+
+      const res = await response.json();
+      setChatSessionExists(true);
+      setCurrentSessionId(res.id); // Save the created session ID
+    } catch (error) {
+      console.error("Error creating session:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlerPressEmoji = () => {
+    onPressEmoji();
+    checkSize();
+  };
+  const checkSize = () => {
+    const senderEl = refContainer.current;
+    if (senderEl && height !== senderEl.clientHeight) {
+      const { clientHeight } = senderEl;
+      setHeight(clientHeight);
+      onChangeSize(clientHeight ? clientHeight - 1 : 0);
+    }
+  };
   useImperativeHandle(ref, () => {
     return {
       onSelectEmoji: handlerOnSelectEmoji,
     };
   });
-
-  const handlerOnChange = (event) => {
-    onTextInputChange && onTextInputChange(event);
-  };
-
-  const handlerSendMessage = () => {
-    const el = inputRef.current;
-    if (el.innerHTML) {
-      sendMessage(el.innerText);
-      el.innerHTML = "";
-    }
-  };
-
   const handlerOnSelectEmoji = (emoji) => {
     const el = inputRef.current;
     const { start, end } = getSelection(el);
@@ -90,34 +161,9 @@ function Sender(
     updateCaret(el, start, emoji.native.length);
   };
 
-  const handlerOnKeyPress = (event) => {
-    const el = inputRef.current;
-
-    if (event.charCode == 13 && !event.shiftKey) {
-      event.preventDefault();
-      handlerSendMessage();
-    }
-    if (event.charCode === 13 && event.shiftKey) {
-      event.preventDefault();
-      insertNodeAtCaret(el);
-      setEnter(true);
-    }
-  };
-
-  // TODO use a context for checkSize and toggle picker
-  const checkSize = () => {
-    const senderEl = refContainer.current;
-    if (senderEl && height !== senderEl.clientHeight) {
-      const { clientHeight } = senderEl;
-      setHeight(clientHeight);
-      onChangeSize(clientHeight ? clientHeight - 1 : 0);
-    }
-  };
-
   const handlerOnKeyUp = (event) => {
     const el = inputRef.current;
     if (!el) return true;
-    // Conditions need for firefox
     if (firefox && event.key === "Backspace") {
       if (el.innerHTML.length === 1 && enter) {
         el.innerHTML = "";
@@ -128,27 +174,35 @@ function Sender(
     }
     checkSize();
   };
+  useImperativeHandle(ref, () => {
+    return {
+      onSelectEmoji: handlerOnSelectEmoji,
+    };
+  });
 
-  const handlerOnKeyDown = (event) => {
+  const handlerSendMessage = async () => {
     const el = inputRef.current;
-
-    if (event.key === "Backspace" && el) {
-      const caretPosition = getCaretIndex(inputRef.current);
-      const character = el.innerHTML.charAt(caretPosition - 1);
-      if (character === "\n") {
-        event.preventDefault();
-        event.stopPropagation();
-        el.innerHTML =
-          el.innerHTML.substring(0, caretPosition - 1) +
-          el.innerHTML.substring(caretPosition);
-        updateCaret(el, caretPosition, -1);
+    if (el.innerHTML) {
+      if (!chatSessionExists) {
+        await handleCreateChatSession();
       }
+      sendMessage(el.innerText, currentSessionId);
+      el.innerHTML = "";
     }
   };
 
-  const handlerPressEmoji = () => {
-    onPressEmoji();
-    checkSize();
+  const handlerOnKeyPress = async (event) => {
+    const el = inputRef.current;
+
+    if (event.charCode == 13 && !event.shiftKey) {
+      event.preventDefault();
+      await handlerSendMessage();
+    }
+    if (event.charCode === 13 && event.shiftKey) {
+      event.preventDefault();
+      insertNodeAtCaret(el);
+      setEnter(true);
+    }
   };
 
   return (
@@ -183,10 +237,8 @@ function Sender(
           contentEditable={!disabledInput}
           ref={inputRef}
           placeholder={placeholder}
-          onInput={handlerOnChange}
+          onInput={onTextInputChange}
           onKeyPress={handlerOnKeyPress}
-          onKeyUp={handlerOnKeyUp}
-          onKeyDown={handlerOnKeyDown}
         />
       </div>
       <button type="submit" className="rcw-send" onClick={handlerSendMessage}>

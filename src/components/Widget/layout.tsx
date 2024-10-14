@@ -40,9 +40,10 @@ type Props = {
   resizable?: boolean;
   emojis?: boolean;
   avatar: string;
-  logoIcon: string;
+  footerIcon: string;
   background_color: string;
   icon_color: string;
+  openLauncher: string;
 };
 
 function WidgetLayout({
@@ -73,9 +74,10 @@ function WidgetLayout({
   resizable,
   emojis,
   avatar,
-  logoIcon,
+  footerIcon,
   background_color,
   icon_color,
+  openLauncher,
 }: Props) {
   const dispatch = useDispatch();
   const { dissableInput, showChat, visible } = useSelector(
@@ -149,7 +151,7 @@ function WidgetLayout({
       {showChat && (
         <Conversation
           avatar={avatar}
-          logoIcon={logoIcon}
+          footerIcon={footerIcon}
           title={title}
           subtitle={subtitle}
           sendMessage={onSendMessage}
@@ -184,6 +186,7 @@ function WidgetLayout({
                 closeImg={launcherCloseImg}
                 openImg={launcherOpenImg}
                 showBadge={showBadge}
+                openLauncher={openLauncher}
               />
             </>
           )}
