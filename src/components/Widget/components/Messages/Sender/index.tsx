@@ -161,19 +161,19 @@ function Sender(
     updateCaret(el, start, emoji.native.length);
   };
 
-  const handlerOnKeyUp = (event) => {
-    const el = inputRef.current;
-    if (!el) return true;
-    if (firefox && event.key === "Backspace") {
-      if (el.innerHTML.length === 1 && enter) {
-        el.innerHTML = "";
-        setEnter(false);
-      } else if (brRegex.test(el.innerHTML)) {
-        el.innerHTML = el.innerHTML.replace(brRegex, "");
-      }
-    }
-    checkSize();
-  };
+  // const handlerOnKeyUp = (event) => {
+  //   const el = inputRef.current;
+  //   if (!el) return true;
+  //   if (firefox && event.key === "Backspace") {
+  //     if (el.innerHTML.length === 1 && enter) {
+  //       el.innerHTML = "";
+  //       setEnter(false);
+  //     } else if (brRegex.test(el.innerHTML)) {
+  //       el.innerHTML = el.innerHTML.replace(brRegex, "");
+  //     }
+  //   }
+  //   checkSize();
+  // };
   useImperativeHandle(ref, () => {
     return {
       onSelectEmoji: handlerOnSelectEmoji,
