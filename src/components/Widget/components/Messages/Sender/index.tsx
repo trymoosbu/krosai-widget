@@ -122,7 +122,7 @@ function Sender(
 
       const res = await response.json();
       setChatSessionExists(true);
-      setCurrentSessionId(res.id); // Save the created session ID
+      setCurrentSessionId(res.id);
     } catch (error) {
       console.error("Error creating session:", error);
       throw error;
