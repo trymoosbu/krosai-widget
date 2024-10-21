@@ -17,7 +17,46 @@ import {
 import Message from "../../src/components/Widget/components/Messages/components/Message";
 import Snippet from "../../src/components/Widget/components/Messages/components/Snippet";
 
+function sendMessage(message: string) {
+  let response = '';
+  //call post api request using fetch
+  fetch("/agent/chat/8664d26d-1581-4996-a6fb-911905a20ee2", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user_message: message,
+    }),
+  })
+  .then((response) => response.json())
+  .then((data) => {
+    response = data
+  })
+  .catch((error) => console.error(error));
+
+  return response;
+}
+
 export function createNewMessage(
+  text: string,
+  sender: string,
+  id?: string
+): MessageI {
+  sendMessage(text)
+  return {
+    type: MESSAGES_TYPES.TEXT,
+    component: Message,
+    text,
+    sender,
+    timestamp: new Date(),
+    showAvatar: true,
+    customId: id,
+    unread: sender === MESSAGE_SENDER.RESPONSE,
+  };
+}
+
+export function createMessageResponse(
   text: string,
   sender: string,
   id?: string

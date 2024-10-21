@@ -87,29 +87,7 @@ function ConnectedWidget({
   avatar,
 }: // footerIcon,
 Props) {
-  const [socketUrl, setSocketUrl] = useState(
-    `wss://krosai.azurewebsites.net/agent/ws/chat/${widget_id}`
-  );
-
-  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
-  const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
-
-  useEffect(() => {
-    if (lastMessage !== null) {
-      setMessageHistory((prev) => prev.concat(lastMessage));
-    }
-  }, [lastMessage]);
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
-
-  console.log(connectionStatus);
-
+  
   const data: widgetProps = useGetWidget(widget_id as string); //get widget
 
   useEffect(() => {

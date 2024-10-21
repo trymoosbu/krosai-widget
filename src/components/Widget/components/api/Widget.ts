@@ -7,7 +7,6 @@ export const useGetWidget = (widget_id: string): widgetProps => {
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   const { data, error, isLoading } = useSWR(url, fetcher);
-  console.log(data);
 
   return data;
 };

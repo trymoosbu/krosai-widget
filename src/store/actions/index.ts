@@ -16,6 +16,7 @@ export function toggleInputDisabled(): actionsTypes.ToggleInputDisabled {
 }
 
 export function addUserMessage(text: string, id?: string): actionsTypes.AddUserMessage {
+  console.log(text)
   return {
     type: actionsTypes.ADD_NEW_USER_MESSAGE,
     text,

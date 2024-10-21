@@ -86,7 +86,7 @@ function Widget({
     if (!userInput.trim()) {
       return;
     }
-
+    console.log(userInput)
     handleSubmit?.(userInput);
     dispatch(addUserMessage(userInput));
     handleNewUserMessage(userInput);
